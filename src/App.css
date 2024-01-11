@@ -1,38 +1,122 @@
+/* General Styles */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f2f5;
+}
+
 .App {
-  text-align: center;
+    text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Header Styles */
+header {
+    background-color: #3b5998;
+    color: white;
+    padding: 10px 0;
+    font-size: 24px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/* Sign In Styles */
+.SignIn {
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 300px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.SignIn input {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    border: 1px solid #ddd;
 }
 
-.App-link {
-  color: #61dafb;
+.SignIn button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    background-color: #3b5998;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.SignIn button:hover {
+    background-color: #345391;
+}
+
+/* ChatRoom Styles */
+.ChatRoom {
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 600px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Messages List */
+.messages {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    overflow-y: auto;
+    max-height: 400px;
+}
+
+/* Individual Message */
+.message {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Sent and Received Messages */
+.sent {
+    text-align: right;
+}
+
+.received {
+    text-align: left;
+}
+
+.message img {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+/* Form Styles */
+form {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+form input {
+    flex-grow: 1;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    margin-right: 10px;
+}
+
+form button {
+    padding: 10px 20px;
+    background-color: #3b5998;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #345391;
 }
