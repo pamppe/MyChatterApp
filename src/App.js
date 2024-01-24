@@ -1,72 +1,27 @@
 import React, {useRef, useState} from 'react';
 import './App.css';
-
-import { initializeApp } from 'firebase/app';
+import { Auth } from "./auth";
+import { firestore } from './config/firebase';
 import { addDoc, serverTimestamp } from 'firebase/firestore';
-import { getFirestore } from 'firebase/firestore';
 import { collection, query, orderBy, limit } from 'firebase/firestore';
-import { getAuth, GoogleAuthProvider, signInWithPopup, signInAnonymously,} from 'firebase/auth';
+import { useCollectionData } from "react-firebase-hooks/firestore";
+import { auth } from './config/firebase';
 import {useAuthState} from "react-firebase-hooks/auth";
-import {useCollectionData} from "react-firebase-hooks/firestore";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyCrCAZWlXeoO34pzNEallWPRf6C86qg2co",
-  authDomain: "mychatapp-4d6ed.firebaseapp.com",
-  projectId: "mychatapp-4d6ed",
-  storageBucket: "mychatapp-4d6ed.appspot.com",
-  messagingSenderId: "90011669534",
-  appId: "1:90011669534:web:4648956947ac255d9c0a0f",
-}
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const firestore = getFirestore(app);
 
 function App() {
-
   const [user] = useAuthState(auth);
 
   return (
-    <div className="App">
-      <header>
-        {user && <SignOut />}
-      </header>
+      <div className='App'>
+        <header>
+          {user ? <logOut /> : <Auth />}
+        </header>
 
-      <section>
-        {user ? <ChatRoom /> : <SignIn />}
-      </section>
-    </div>
+        <section>
+          {user && <ChatRoom />}
+        </section>
+      </div>
   );
-}
-
-function SignIn() {
-  // Function for signing in with Google
-  const signInWithGoogle = () => {
-    const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider);
-  };
-
-  // Function for signing in anonymously
-  const signAnonymous = () => {
-    signInAnonymously(auth).catch(error => {
-      console.error('Error signing in anonymously', error);
-    });
-  };
-
-  return (
-    <div>
-    <button onClick={signInWithGoogle}>Sign in with Google</button>
-    <button onClick={signAnonymous}>Sign in Anonymously</button>
-    </div>
-  );
-}
-
-function SignOut() {
-  return auth.currentUser && (
-
-    <button onClick={() => auth.signOut()}>Sign Out</button>
-  )
 }
 
 function ChatRoom() {
