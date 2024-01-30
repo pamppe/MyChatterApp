@@ -1,12 +1,12 @@
-import React, {useRef, useState} from 'react';
+// App.js
+import React, { useEffect, useRef, useState } from 'react';
 import './App.css';
 import { Auth } from "./auth";
-import { firestore } from './config/firebase';
+import { firestore, auth } from './config/firebase';
 import { addDoc, serverTimestamp } from 'firebase/firestore';
 import { collection, query, orderBy, limit } from 'firebase/firestore';
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import { auth } from './config/firebase';
-import {useAuthState} from "react-firebase-hooks/auth";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 function App() {
   const [user] = useAuthState(auth);
@@ -14,9 +14,8 @@ function App() {
   return (
       <div className='App'>
         <header>
-          {user ? <logOut /> : <Auth />}
+          {user ? <SignOut /> : <Auth />}
         </header>
-
         <section>
           {user && <ChatRoom />}
         </section>
@@ -25,8 +24,8 @@ function App() {
 }
 
 function ChatRoom() {
-
-  const dummy = useRef()
+  const dummy = useRef();
+  const messagesEndRef = useRef(null);
 
   // Reference to the collection
   const messagesRef = collection(firestore, 'messages');
@@ -36,8 +35,15 @@ function ChatRoom() {
 
   // Using the query with useCollectionData
   const [messages] = useCollectionData(messagesQuery, { idField: 'id' });
-
   const [formValue, setFormValue] = useState('');
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   const sendMessage = async (e) => {
     e.preventDefault();
@@ -52,24 +58,22 @@ function ChatRoom() {
     });
 
     setFormValue('');
-
-    dummy.current.scrollIntoView({ behavior: 'smooth' });
-  }
+    scrollToBottom();
+  };
 
   return (
-  <>
-    <main>
-      {messages && messages.map(msg => <ChatMessage key={msg.id} message={msg}/>)}
-    </main>
+      <>
+        <main className="chat-messages">
+          {messages && messages.map(msg => <ChatMessage key={msg.id} message={msg} />)}
+          <div ref={messagesEndRef} />
+        </main>
 
-    <div ref={dummy}></div>
-
-    <form onSubmit={sendMessage}>
-      <input value={formValue} onChange={(e) => setFormValue(e.target.value)}/>
-      <button type="submit">🗣</button>
-    </form>
-  </>
-)
+        <form onSubmit={sendMessage}>
+          <input value={formValue} onChange={(e) => setFormValue(e.target.value)} />
+          <button type="submit">Send</button>
+        </form>
+      </>
+  );
 }
 
 function ChatMessage(props) {
@@ -79,10 +83,16 @@ function ChatMessage(props) {
   const avatarSrc = photoURL || 'avatar.png';
 
   return (
-     <div className={`message ${messageClass}`}>
-     <img src={avatarSrc} alt="Avatar" onError={(e)=> { e.target.onerror = null; e.target.src = 'avatar.png'; }} />
-      <p>{text}</p>
-     </div>
+      <div className={`message ${messageClass}`}>
+        <img src={avatarSrc} alt="Avatar" onError={(e) => { e.target.onerror = null; e.target.src = 'avatar.png'; }} />
+        <p>{text}</p>
+      </div>
+  );
+}
+
+function SignOut() {
+  return (
+      <button onClick={() => auth.signOut()}>Sign Out</button>
   );
 }
 
