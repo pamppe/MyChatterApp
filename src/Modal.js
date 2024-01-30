@@ -1,9 +1,9 @@
-function Modal({ children, onClose }) {
+function Modal({ message, onClose }) {
     return (
         <div className="modal">
             <div className="modal-content">
-                <span className="close-button" onClick={onClose}>&times;</span>
-                {children}
+                <p>{message}</p>
+                <button onClick={onClose}>OK</button>
             </div>
         </div>
     );
